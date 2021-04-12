@@ -143,10 +143,10 @@ function render_emp_data()
             echo "
                     <tr>
                         <td>
-                            <a class='text-dark mr-2' href='/hr/app/emp-data.php/?action=delete&id={$id}'><i class='fas fa-trash-alt'></i></a>
-                            <a class='text-dark mr-2' href='/hr/app/loan.php/?action=loans&id={$id}'><i class='fas fa-coins'></i></a>
-                            <a class='text-dark mr-2' href='/hr/app/add-emp.php/?action=update&id={$id}'><i class='fas fa-edit'></i></a>
-                            <a class='text-dark' href='/hr/app/emp-report.php/?id={$id}'><i class='far fa-file-alt'></i></a>
+                            <a class='text-dark mr-2' href='/hr/app/emp-data.php?action=delete&id={$id}'><i class='fas fa-trash-alt'></i></a>
+                            <a class='text-dark mr-2' href='/hr/app/loan.php?action=loans&id={$id}'><i class='fas fa-coins'></i></a>
+                            <a class='text-dark mr-2' href='/hr/app/add-emp.php?action=update&id={$id}'><i class='fas fa-edit'></i></a>
+                            <a class='text-dark' href='/hr/app/emp-report.php?id={$id}'><i class='far fa-file-alt'></i></a>
                         </td>
                         <td>$pranch</td>
                         <td>$day_off</td>
@@ -166,6 +166,9 @@ function render_emp_data()
 function emp_report($id, $year, $month)
 {
     $conn = makeConnection();
+    $sql = "SELECT * FROM users WHERE `id` = $id";
+    $result = $conn->query($sql)->fetch_assoc();
+    $workHours = $result['workHours'];
     $sql = "SELECT * FROM att WHERE `day` LIKE '$year-$month%' AND `user_id` = $id";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
@@ -176,10 +179,11 @@ function emp_report($id, $year, $month)
             $worked_time = $row['worked_time'];
             $bounes = isset($row['bounes']) ? $row['bounes'] : '-';
             $subtract = isset($row['subtract']) ? $row['subtract'] : '-';
-            $note = isset($row['note']) ? $row['note'] : '-';;
-            echo "
-                    <tr>
-                        <td><a class='text-dark mr-2' href='/hr/app/edit-report.php/?action=edit&id={$id}&day={$date}&start={$start}&finish={$finish}&worked-time={$worked_time}&bounes={$bounes}&subtract={$subtract}&note={$note}'><i class='fas fa-edit'></i></a></td>
+            $note = isset($row['note']) ? $row['note'] : '-';
+            if ($worked_time > $workHours) {
+                echo "
+                    <tr style='background-color: rgba(245, 79, 28, 0.6)'>
+                        <td><a class='text-dark mr-2' href='/hr/app/edit-report.php?action=edit&id={$id}&day={$date}&start={$start}&finish={$finish}&worked-time={$worked_time}&bounes={$bounes}&subtract={$subtract}&note={$note}'><i class='fas fa-edit'></i></a></td>
                         <td>$note</td>
                         <td>$subtract</td>
                         <td>$bounes</td>
@@ -189,6 +193,20 @@ function emp_report($id, $year, $month)
                         <td>$date</td>
                     </tr>
                 ";
+            } else {
+                echo "
+                    <tr>
+                        <td><a class='text-dark mr-2' href='/hr/app/edit-report.php?action=edit&id={$id}&day={$date}&start={$start}&finish={$finish}&worked-time={$worked_time}&bounes={$bounes}&subtract={$subtract}&note={$note}'><i class='fas fa-edit'></i></a></td>
+                        <td>$note</td>
+                        <td>$subtract</td>
+                        <td>$bounes</td>
+                        <td>$worked_time</td>
+                        <td>$finish</td>
+                        <td>$start</td>
+                        <td>$date</td>
+                    </tr>
+                ";
+            }
         }
     }
     closeConnection($conn);
@@ -717,6 +735,7 @@ function test_input($conn, $data)
     $data = mysqli_real_escape_string($conn, $data);
     return $data;
 }
+
 if (isset($_POST['login'])) {
     login($_POST['username'], $_POST['password']);
 }

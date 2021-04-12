@@ -1,33 +1,37 @@
 <?php
-    session_start();
-    require('../app.php');
-    app_handler();
-    $page_title = "Employee Report";
-    $css_file = "../css.css";
-    require('../comp/start.php');
-    require('../comp/navbar.php');
+session_start();
+require('../app.php');
+app_handler();
+$page_title = "Employee Report";
+$css_path = "css/";
+require('../comp/start.php');
+require('../comp/navbar.php');
 ?>
 <div class="pt-3 pl-3">
     <?php
-        $back_url="http://{$_SERVER['SERVER_NAME']}:8080/hr/app/emp-data.php";
-        require('../comp/back-button.php');
-        if (isset($_GET['month'])){
-            $host = $_SERVER['SERVER_NAME'];
-            $month = $_GET['month'];
-            $year = $_GET['year'];
-            $id = $_GET['id'];
-            echo "<a href='http://{$host}:8080/hr/app/print-report.php?id=$id&year=$year&month=$month' class='btn btn-outline-success ml-3'>Print This Report</a>";
-        }
+    $back_url = "http://{$_SERVER['SERVER_NAME']}:8080/hr/app/emp-data.php";
+    require('../comp/back-button.php');
+    if (isset($_GET['month'])) {
+        $host = $_SERVER['SERVER_NAME'];
+        $month = $_GET['month'];
+        $year = $_GET['year'];
+        $id = $_GET['id'];
+        echo "<a href='http://{$host}:8080/hr/app/print-report.php?id=$id&year=$year&month=$month' class='btn btn-outline-success ml-3'>Print This Report</a>";
+    }
     ?>
 </div>
 <?php
-    if (!isset($_GET['month'])) $id = $_GET['id']; echo "
+if (!isset($_GET['month'])) $id = $_GET['id'];
+echo "
         <form method='get' class='text-center'>
             <h3 class='mb-3'>من فضلك اختر تاريخ التقرير</h3>
             Year: 
             <select name='year'>
                 <option value='2020'>2020</option>
                 <option value='2021'>2021</option>
+                <option value='2022'>2022</option>
+                <option value='2023'>2023</option>
+                <option value='2024'>2024</option>
             </select>
             Month:
             <select name='month'>
@@ -49,8 +53,8 @@
             <input style='display:none' type='number' name='id' value='$id'>
         </form>";
 
-    if (isset($_GET['id']) AND isset($_GET['month'])){
-        echo "
+if (isset($_GET['id']) and isset($_GET['month'])) {
+    echo "
             <table class='table table-striped text-center mt-4'>
                 <thead>
                     <tr>
@@ -65,11 +69,11 @@
                     </tr>
                 </thead>
                 <tbody>";
-        emp_report($_GET['id'],$_GET['year'],$_GET['month']);
-        echo "
+    emp_report($_GET['id'], $_GET['year'], $_GET['month']);
+    echo "
                 </tbody>
             </table>";
-    }
-    if (isset($_GET['r']) AND $_GET['r'] == 'update-success') echo "<script>alert('تم تحديث البيانات بنجاح')</script>";
-    require('../comp/end.php');
+}
+if (isset($_GET['r']) and $_GET['r'] == 'update-success') echo "<script>alert('تم تحديث البيانات بنجاح')</script>";
+require('../comp/end.php');
 ?>

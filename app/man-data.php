@@ -1,14 +1,15 @@
 <?php
-    session_start();
-    require('../app.php');
-    app_handler(true);
-    $page_title = "Manager Data";
-    $css_file = "../css.css";
-    require('../comp/start.php');
-    require('../comp/navbar.php');
+session_start();
+require('../app.php');
+app_handler(true);
+$page_title = "Manager Data";
+$css_path = "css/";
+require('../comp/start.php');
+require('../comp/navbar.php');
 ?>
 <div class="p-3">
-    <?php $back_url='admin-panel.php'; require('../comp/back-button.php');?>
+    <?php $back_url = 'admin-panel.php';
+    require('../comp/back-button.php'); ?>
 </div>
 <table class="table table-striped text-center">
     <thead>
@@ -26,28 +27,28 @@
         </tr>
     </thead>
     <tbody>
-        <?php render_man_data()?>
+        <?php render_man_data() ?>
     </tbody>
 </table>
 <?php
-    if (isset($_GET['action']) && isset($_GET['id']) && $_GET['action'] == 'delete'){
-        delete_man($_GET['id']);
-    }
-    if (isset($_GET['r'])){
-        if ($_GET['r'] == 'update_success'){
-            echo '
+if (isset($_GET['action']) && isset($_GET['id']) && $_GET['action'] == 'delete') {
+    delete_man($_GET['id']);
+}
+if (isset($_GET['r'])) {
+    if ($_GET['r'] == 'update_success') {
+        echo '
                 <script>
                     alert("تم تحديث بيانات المدير بنجاح")
                 </script>';
-        }
     }
-    if (isset($_GET['r'])){
-        if ($_GET['r'] == 'delete-success'){
-            echo '
+}
+if (isset($_GET['r'])) {
+    if ($_GET['r'] == 'delete-success') {
+        echo '
                 <script>
                     alert("تم حذف المدير بنجاح")
                 </script>';
-        }
     }
-    require('../comp/end.php');
+}
+require('../comp/end.php');
 ?>
