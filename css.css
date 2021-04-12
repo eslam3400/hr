@@ -1,0 +1,24 @@
+/* index.php */
+#login-form{
+    margin: 7% 30% auto 30%;
+    text-align: center;
+}
+#login-form input{
+    text-align: center;
+}
+/* admin-panel */
+.admin-links{
+    width: auto;
+    margin:  5% 25% auto 25%;
+    padding: 2% 0 2% 0;
+}
+/* response frame */
+#att{
+    width: 100vw;
+}
+#att iframe{
+    width: 65vw;
+    height: 90vh;
+    border: none;
+    position: fixed;
+}
